@@ -1,19 +1,38 @@
 package com.task3;
 
-import java.util.Random;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
 
 public class Key {
 
-    public static String generateRandomKey() {
-        Random random = new Random();
-        String getKey = "";
-        for (int i = 0; i < 32; i++) {
-            int rand = 48 + random.nextInt(90 - 48);
-            while (rand > 57 && rand < 65) {
-                rand = 48 + random.nextInt(90 - 48);
-            }
-            getKey += (char) rand;
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    public String createSecretKey() {
+        byte[]       bytes  = new byte[32];
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(bytes);
+
+        byte[] key = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            key = md.digest(bytes);
+            key = Arrays.copyOf(key, 16);
+        } catch (NoSuchAlgorithmException e) {
         }
-        return getKey;
+        return bytesToHex(key);
+    }
+
+    private String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }

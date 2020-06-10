@@ -13,8 +13,8 @@ public class Menu {
 
     public void startMenu() {
 
+        String hmacKey = key.createSecretKey();
         int computerStep = rps.generateComputerStep();
-        String hmacKey = key.generateRandomKey();
         System.out.printf("HMAC: %s%n", new HMAC.Builder()
                 .setKey(hmacKey)
                 .setValue(String.valueOf(computerStep))
