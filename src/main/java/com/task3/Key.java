@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 public class Key {
 
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-
     public String createSecretKey() {
         byte[]       bytes  = new byte[32];
         SecureRandom random = new SecureRandom();
@@ -18,7 +16,7 @@ public class Key {
 
         byte[] key = null;
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             key = md.digest(bytes);
             key = Arrays.copyOf(key, 16);
         } catch (NoSuchAlgorithmException e) {
@@ -26,13 +24,13 @@ public class Key {
         return bytesToHex(key);
     }
 
-    private String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    private static String bytesToHex(byte[] hash) {
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
         }
-        return new String(hexChars);
+        return hexString.toString();
     }
 }

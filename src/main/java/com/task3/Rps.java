@@ -31,7 +31,7 @@ public class Rps {
     }
 
     public void checkWinAndLos(int compStep) {
-        int winners[] = Arrays.copyOfRange(numberOfSteps, 0,  numberOfSteps.length / 2);;
+        int winners[] = Arrays.copyOfRange(numberOfSteps, 0,  numberOfSteps.length / 2);
         int losers[] = Arrays.copyOfRange(numberOfSteps, numberOfSteps.length / 2, numberOfSteps.length - 1);
         if (Arrays.asList(converIntArrToIntegerArray(winners)).contains(compStep)) {
             System.out.println("You loss!");
